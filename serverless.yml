@@ -7,7 +7,47 @@ provider:
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'us-east-1'}
 
+  environment:
+    PETS_TABLE: PETS
+    PETS_CONDITION_INDEX: PetsByCondition
+
 functions:
 
   createPet:
     handler: createPet.handler
+    events:
+      - http:
+          method: post
+          path: pet
+          cors: true
+          documentation:
+            summary: It creates a new pet
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:PutItem
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.PETS_TABLE}
+
+resources:
+  Resources:
+    PetsTableDynamoDB:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: petId
+            AttributeType: S
+          - AttributeName: condition
+            AttributeType: S
+        KeySchema:
+          - AttributeName: petId
+            KeyType: HASH
+        GlobalSecondaryIndexes:
+          - IndexName: ${self:provider.environment.PETS_CONDITION_INDEX}
+            KeySchema:
+            - AttributeName: condition
+              KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+        BillingMode: PAY_PER_REQUEST
+        TableName: ${self:provider.environment.PETS_TABLE}
+        
