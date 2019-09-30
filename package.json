@@ -1,0 +1,32 @@
+{
+  "name": "peludo-serverless-api",
+  "version": "1.0.0",
+  "description": "Serverless api for Peludo Application",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/academy-software/peludo-serverless-api.git"
+  },
+  "author": "Software Academy",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/academy-software/peludo-serverless-api/issues"
+  },
+  "homepage": "https://github.com/academy-software/peludo-serverless-api#readme",
+  "dependencies": {
+    "@types/axios": "^0.14.0",
+    "@types/http-errors": "^1.6.1",
+    "source-map-support": "^0.5.11",
+    "aws-sdk": "^2.433.0"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.17",
+    "@types/node": "^10.14.4",
+    "serverless-webpack": "^5.2.0",
+    "ts-loader": "^5.3.3",
+    "typescript": "^3.4.1",
+    "webpack": "^4.29.6"
+  }
+}
