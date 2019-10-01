@@ -4,6 +4,7 @@ import { CreatePetRequest } from '../requests/CreatePetRequest';
 
 const dynamoClient = getDynamoDBClient();
 const PETS_TABLE = process.env.PETS_TABLE;
+const PETS_CONDITION_INDEX = process.env.PETS_CONDITION_INDEX;
 
 export const createPet = async (newPetRequest: CreatePetRequest) => {
     const petUUID = uuid.v4();
@@ -20,4 +21,20 @@ export const createPet = async (newPetRequest: CreatePetRequest) => {
     }).promise();
 
     return petCreated.Attributes;
+}
+
+export const getPetsByCondition = async (condition: string) => {
+    const result = await dynamoClient.query({
+        TableName: PETS_TABLE,
+        IndexName: PETS_CONDITION_INDEX,
+        KeyConditionExpression: '#condition = :condition',
+        ExpressionAttributeValues: {
+            ':condition': condition
+        },
+        ExpressionAttributeNames: {
+            '#condition': 'condition'
+        }
+    }).promise();
+
+    return result.Items;
 }

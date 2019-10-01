@@ -28,7 +28,7 @@ custom:
 
 functions:
 
-  CreatePet:
+  createPet:
     handler: src/lambda/http/createPet.handler
     events:
       - http:
@@ -41,6 +41,21 @@ functions:
       - Effect: Allow
         Action:
           - dynamodb:PutItem
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.PETS_TABLE}
+  
+  getPets:
+    handler: src/lambda/http/getPets.handler
+    events:
+      - http:
+          method: get
+          path: pets
+          cors: true
+          documentation:
+            summary: It fetches all pets by condition
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.PETS_TABLE}
 
 resources:
