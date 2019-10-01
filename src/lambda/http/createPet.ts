@@ -12,6 +12,6 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
 
     return {
         statusCode: 201,
-        body: JSON.stringify({ pet: petCreated })
+        body: JSON.stringify(petCreated)
     };
 }
