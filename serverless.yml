@@ -1,6 +1,12 @@
 service: 
   name: peludo
 
+plugins:
+  - serverless-webpack
+  - serverless-dynamodb-local
+  - serverless-offline
+  - serverless-iam-roles-per-function
+
 provider:
   name: aws
   runtime: nodejs10.x
@@ -11,10 +17,19 @@ provider:
     PETS_TABLE: PETS
     PETS_CONDITION_INDEX: PetsByCondition
 
+custom:
+  dynamodb:
+    stages:
+      - ${self:provider.stage}
+    start:
+      port: 8000
+      inMemory: true
+      migrate: true
+
 functions:
 
-  createPet:
-    handler: createPet.handler
+  CreatePet:
+    handler: src/lambda/http/createPet.handler
     events:
       - http:
           method: post
