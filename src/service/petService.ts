@@ -11,7 +11,7 @@ export const createPet = async (newPetRequest: CreatePetRequest) => {
 
     const newPet = {
         ...newPetRequest,
-        petId: petUUID,
+        id: petUUID,
         createdAt: new Date().toISOString()
     }
 
@@ -33,6 +33,18 @@ export const getPetsByCondition = async (condition: string) => {
         },
         ExpressionAttributeNames: {
             '#condition': 'condition'
+        }
+    }).promise();
+
+    return result.Items;
+}
+
+export const getPetById = async (petId: string) => {
+    const result = await dynamoClient.query({
+        TableName: PETS_TABLE,
+        KeyConditionExpression: 'id = :id',
+        ExpressionAttributeValues: {
+            ':id': petId
         }
     }).promise();
 

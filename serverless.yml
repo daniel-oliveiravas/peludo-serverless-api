@@ -58,18 +58,34 @@ functions:
           - dynamodb:Query
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.PETS_TABLE}
 
+  getPet:
+    handler: src/lambda/http/getPet.handler
+    events:
+      - http:
+          method: get
+          path: pets/{id}
+          cors: true
+          documentation:
+            summary: It fetches a pet by id
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.PETS_TABLE}
+
+
 resources:
   Resources:
     PetsTableDynamoDB:
       Type: AWS::DynamoDB::Table
       Properties:
         AttributeDefinitions:
-          - AttributeName: petId
+          - AttributeName: id
             AttributeType: S
           - AttributeName: condition
             AttributeType: S
         KeySchema:
-          - AttributeName: petId
+          - AttributeName: id
             KeyType: HASH
         GlobalSecondaryIndexes:
           - IndexName: ${self:provider.environment.PETS_CONDITION_INDEX}
