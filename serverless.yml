@@ -73,6 +73,20 @@ functions:
           - dynamodb:Query
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.PETS_TABLE}
 
+  deletePet:
+    handler: src/lambda/http/deletePet.handler
+    events:
+      - http:
+          method: delete
+          path: pets/{id}
+          cors: true
+          documentation:
+            summary: It deletes a pet by id
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:DeleteItem
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.PETS_TABLE}
 
 resources:
   Resources:

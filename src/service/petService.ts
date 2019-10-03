@@ -39,6 +39,15 @@ export const getPetsByCondition = async (condition: string) => {
     return result.Items;
 }
 
+export const deletePetById = async (petId: string) => {
+    await dynamoClient.delete({
+        TableName: PETS_TABLE,
+        Key: {
+            'id': petId
+        }
+    }).promise();
+}
+
 export const getPetById = async (petId: string) => {
     const result = await dynamoClient.query({
         TableName: PETS_TABLE,
