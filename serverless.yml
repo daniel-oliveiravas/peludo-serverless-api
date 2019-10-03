@@ -88,6 +88,19 @@ functions:
           - dynamodb:DeleteItem
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.PETS_TABLE}
 
+  updatePet:
+    handler: src/lambda/http/updatePet.handler
+    events:
+      - http:
+          method: patch
+          path: pets/{id}
+          cors: true
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:UpdateItem
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.PETS_TABLE}
+
 resources:
   Resources:
     PetsTableDynamoDB:

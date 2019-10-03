@@ -1,6 +1,7 @@
 import * as uuid from 'uuid';
 import { getDynamoDBClient } from '../utils/AwsUtils';
 import { CreatePetRequest } from '../requests/CreatePetRequest';
+import { UpdatePetRequest } from '../requests/UpdatePetRequest';
 
 const dynamoClient = getDynamoDBClient();
 const PETS_TABLE = process.env.PETS_TABLE;
@@ -46,6 +47,26 @@ export const deletePetById = async (petId: string) => {
             'id': petId
         }
     }).promise();
+}
+
+export const updatePet = async (petId: string, updatePetRequest: UpdatePetRequest) => {
+    const updateParams = {
+        TableName: PETS_TABLE,
+        Key: {
+            'id': petId
+        },
+        UpdateExpression: 'set gender = :gender, #name = :name',
+        ExpressionAttributeValues: {
+            ":gender": updatePetRequest.gender,
+            ":name": updatePetRequest.name
+        },
+        ExpressionAttributeNames: {
+            '#name': 'name'
+        },
+        ReturnValues: 'ALL_NEW'
+    };
+
+    return await dynamoClient.update(updateParams).promise();
 }
 
 export const getPetById = async (petId: string) => {
