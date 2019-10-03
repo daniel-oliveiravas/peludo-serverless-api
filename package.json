@@ -20,6 +20,7 @@
     "@types/http-errors": "^1.6.1",
     "aws-sdk": "^2.433.0",
     "jsonwebtoken": "^8.5.1",
+    "middy": "^0.29.0",
     "source-map-support": "^0.5.11",
     "uuid": "^3.3.3"
   },
