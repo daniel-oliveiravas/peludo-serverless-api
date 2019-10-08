@@ -35,7 +35,8 @@ functions:
     events:
       - http:
           method: post
-          path: pet
+          path: pets
+          authorizer: Auth
           cors: true
           documentation:
             summary: It creates a new pet
@@ -51,6 +52,7 @@ functions:
       - http:
           method: get
           path: pets
+          authorizer: Auth
           cors: true
           documentation:
             summary: It fetches all pets by condition
@@ -66,6 +68,7 @@ functions:
       - http:
           method: get
           path: pets/{id}
+          authorizer: Auth
           cors: true
           documentation:
             summary: It fetches a pet by id
@@ -93,6 +96,7 @@ functions:
       - http:
           method: delete
           path: pets/{id}
+          authorizer: Auth
           cors: true
           documentation:
             summary: It deletes a pet by id
@@ -108,6 +112,7 @@ functions:
       - http:
           method: patch
           path: pets/{id}
+          authorizer: Auth
           cors: true
     iamRoleStatements:
       - Effect: Allow
@@ -169,6 +174,6 @@ resources:
     KMSKeyAlias:
       Type: AWS::KMS::Alias
       Properties:
-        AliasName: alias/auth0Key-${self:provider.stage}
+        AliasName: alias/auth0Key-${self:service.name}-${self:provider.stage}
         TargetKeyId: !Ref KMSKey
     
