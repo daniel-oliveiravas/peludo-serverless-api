@@ -3,9 +3,9 @@ service:
 
 plugins:
   - serverless-webpack
+  - serverless-iam-roles-per-function
   - serverless-dynamodb-local
   - serverless-offline
-  - serverless-iam-roles-per-function
 
 provider:
   name: aws
@@ -61,6 +61,10 @@ functions:
         Action:
           - dynamodb:Query
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.PETS_TABLE}
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.PETS_TABLE}/index/${self:provider.environment.PETS_CONDITION_INDEX}
 
   getPet:
     handler: src/lambda/http/getPet.handler
